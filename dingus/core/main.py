@@ -20,6 +20,8 @@ def main() -> int:
     )
 
     backend = OllamaBackend(backend_cfg)
+    print(f"[debug] Using model '{backend_cfg.model}'")
+
     memory = MemoryStore(Path("data") / "memory.json")
 
     project_mgr = ProjectManager(

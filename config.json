@@ -1,7 +1,7 @@
 {
   "model_backend": {
     "base_url": "http://localhost:11434",
-    "model": "llama3"
+    "model": "mistral"
   },
   "dingus": {
     "default_project": "default"
