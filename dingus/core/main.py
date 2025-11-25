@@ -8,7 +8,7 @@ from dingus.core.interface import handle_command
 from dingus.core.memory import MemoryStore
 from dingus.core.model_backend import BackendConfig, OllamaBackend
 from dingus.core.modules.project_manager import ProjectManager
-
+from dingus.core.modules.playbook import PlaybookManager
 
 def main() -> int:
     # Load config
@@ -28,6 +28,8 @@ def main() -> int:
         memory,
         default_project=config.get("dingus.default_project", "default")
     )
+    
+    playbook_mgr = PlaybookManager(Path("data") / "playbooks")
 
     print("Dingus v0.1 – local CLI (Ollama backend)")
     print("Type /help for commands, /quit to exit.\n")
@@ -40,6 +42,30 @@ def main() -> int:
             break
 
         if not user_input.strip():
+            continue
+
+        # -------------------------------------------
+        # PLAYBOOK COMMANDS
+        # -------------------------------------------
+        if user_input.startswith("/playbook "):
+            parts = user_input.split(" ", 2)
+            if len(parts) < 2:
+                print("Usage: /playbook <show|add> [text]")
+                continue
+
+            subcmd = parts[1]
+            arg = parts[2] if len(parts) > 2 else ""
+            project = project_mgr.active_project
+
+            if subcmd == "show":
+                print(playbook_mgr.show(project))
+            elif subcmd == "add":
+                if not arg.strip():
+                    print("Usage: /playbook add <text-to-promote>")
+                else:
+                    print(playbook_mgr.add_entry(project, arg))
+            else:
+                print("Unknown playbook subcommand.")
             continue
 
         # -------------------------------------------
