@@ -49,7 +49,7 @@ def main() -> int:
             parts = user_input.split(" ", 2)
 
             if len(parts) < 2:
-                print("Usage: /project <create|switch|list> [name]")
+                print("Usage: /project <create|switch|list|summary> [name]")
                 continue
 
             subcmd = parts[1]
@@ -61,6 +61,10 @@ def main() -> int:
                 print(project_mgr.switch(arg))
             elif subcmd == "list":
                 print("\n".join(project_mgr.list()))
+            elif subcmd == "summary":
+                # If name provided, summarize that project; otherwise current
+                target = arg or None
+                print(project_mgr.summarize(backend=backend, project=target))
             else:
                 print("Unknown project subcommand.")
             continue

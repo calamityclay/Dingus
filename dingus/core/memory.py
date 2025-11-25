@@ -56,6 +56,17 @@ class MemoryStore:
         )
         self._entries.append(entry)
         self._save()
+    
+    def get_project_dialogue(self, project: str) -> list[LogEntry]:
+        """
+        All user/assistant entries for a given project, in order.
+        """
+        return [
+            e
+            for e in self._entries
+            if e.project == project and e.role in ("user", "assistant")
+        ]
+
 
     @property
     def entries(self) -> List[LogEntry]:
